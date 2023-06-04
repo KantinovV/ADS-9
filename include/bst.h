@@ -1,66 +1,60 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
-#include <iostream>
-#include <fstream>
 #include <string>
-#include <cctype>
 #include <algorithm>
-
-struct Node {
-  std::string word;
-  int count;
-  Node* levo;
-  Node* pravo;
-  explicit Node(const std::string& word) : word(word), count(1), levo(nullptr), pravo(nullptr) {}
-};
 template<typename T>
 class BST {
  private:
-  Node* root;
-  Node* insertNode(Node* root, const std::string& word) {
-    if (word < root->word) {
-      root->levo = insertNode(root->levo, word);
-    } else if (word > root->word) {
-      root->pravo = insertNode(root->pravo, word);
-    } else {
-      root->count++;
+    struct Node {
+        Node *right, *left;
+        T value;
+        int pohyi;
+    };
+    Node* root;
+    Node* addNode(Node* root, const T& value) {
+        if (!root) {
+            root = new Node;
+            root->value = value;
+            root->pohyi = 1;
+            root->left = root->right = nullptr;
+         } else if (root->value > value) {
+             root->left = addNode(root->left, value);
+         } else if (root->value < value) {
+             root->right = addNode(root->right, value);
+         } else {
+             ++root->pohyi;
+         }
+         return root;
     }
-    if (root == nullptr) {
-      return new Node(word);
+    int depth(Node* root) {
+        if (!root) {
+            return 0;
+        }
+        return 1 + std::max(depth(root->left), depth(root->right));
     }
-    return root;
-  }
-  Node* searchNode(Node* root, const std::string& word) {
-    if (root == nullptr || root->word == word) {
-      return root;
-    }
-    if (word < root->word) {
-      return searchNode(root->levo, word);
-    } else {
-      return searchNode(root->pravo, word);
-    }
-  }
-  int datitiDepth(Node* root) {
-    if (root == nullptr) {
-      return 0;
-    }
-    int levoDepth = datitiDepth(root->levo);
-    int pravoDepth = datitiDepth(root->pravo);
-    return std::max(levoDepth, pravoDepth) + 1;
-  }
 
  public:
-  BST() : root(nullptr) {}
-  int depth() {
-    return datitiDepth(root) - 1;
-  }
-  int search(const std::string& word) {
-    Node* node = searchNode(root, word);
-    return (node != nullptr) ? node->count : 0;
-  }
-  void addElement(const std::string& word) {
-    root = insertNode(root, word);
-  }
+    void addVal(T value) {
+        root = addNode(root, value);
+    }
+    int depth() {
+        return depth(root) - 1;
+    }
+    int search(const T& value) {
+        Node* copy = root;
+        while (copy && copy->value != value) {
+            if (copy->value > value)
+                copy = copy->left;
+            else
+                copy = copy->right;
+        }
+        if (!copy) {
+            return 0;
+        }
+        return copy->pohyi;
+    }
+    BST() : root(nullptr) {}
+    BST<std::string> createTree(const char* filename);
 };
 #endif  // INCLUDE_BST_H_
