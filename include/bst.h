@@ -29,7 +29,6 @@ class BST {
     if (root == nullptr) {
       return new Node(word);
     }
-   
     return root;
   }
   Node* searchNode(Node* root, const std::string& word) {
@@ -50,12 +49,13 @@ class BST {
     int pravoDepth = datitiDepth(root->pravo);
     return std::max(levoDepth, pravoDepth) + 1;
   }
+
  public:
   BST() : root(nullptr) {}
-   int depth() {
+  int depth() {
     return datitiDepth(root) - 1;
   }
-   int search(const std::string& word) {
+  int search(const std::string& word) {
     Node* node = searchNode(root, word);
     return (node != nullptr) ? node->count : 0;
   }
