@@ -14,9 +14,9 @@ BST<std::string> makeTree(const char* filename) {
   std::string tekst;
   
   while (std::getline(file, liniy)) {
-    text = tekst + liniy + " ";
+    tekst = tekst + liniy + " ";
   }
-  for (auto a : text) {
+  for (auto a : tekst) {
     if (isalpha(a)) {
       a = tolower(a);
       dobavit += a;
