@@ -55,7 +55,7 @@ class BST {
    int depth() {
     return datitiDepth(root) - 1;
   }
-   int sortirovka(const std::string& word) {
+   int search(const std::string& word) {
     Node* node = searchNode(root, word);
     return (node != nullptr) ? node->count : 0;
   }
